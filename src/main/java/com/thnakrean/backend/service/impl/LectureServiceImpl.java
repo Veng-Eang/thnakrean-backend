@@ -1,43 +1,37 @@
 package com.thnakrean.backend.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.thnakrean.backend.dto.CourseViewVideo;
+import com.thnakrean.backend.dto.LectureDto;
+import com.thnakrean.backend.entities.Lecture;
+import com.thnakrean.backend.mapper.LectureMapper;
+import com.thnakrean.backend.repository.LectureRepository;
+import com.thnakrean.backend.repository.VideoRepository;
+import com.thnakrean.backend.service.LectureService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import com.thnakrean.backend.dto.LectureDto;
-import com.thnakrean.backend.entities.Curriculum;
-import com.thnakrean.backend.entities.Lecture;
-import com.thnakrean.backend.exception.ResourceNotFoundException;
-import com.thnakrean.backend.mapper.LectureMapper;
-import com.thnakrean.backend.repository.CurriculumRepository;
-import com.thnakrean.backend.repository.LectureRepository;
-import com.thnakrean.backend.service.CurriculumService;
-import com.thnakrean.backend.service.LectureService;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class LectureServiceImpl implements LectureService {
 	private final LectureRepository lectureRepository;
-	private final CurriculumRepository curriculumRepository;
+	private final VideoRepository videoRepository;
+
 
 	@Override
-	public List<LectureDto> getLectureByCurriculumId(Integer id) {
-		List<Lecture> lectures = lectureRepository.findByCurriculumId(id);
-		List<LectureDto> lectureDtos = lectures.stream().map(lecture->LectureMapper.INSTANCE.toLectureDto(lecture))
-						.collect(Collectors.toList());
+	public List<LectureDto> getLectureAndVideoByCourseId(Integer courseId) {
+		List<Lecture> lectures = lectureRepository.findLecturesByCourseId(courseId);
+		List<LectureDto> lectureDtos = lectures.stream()
+												.map(lecture -> LectureMapper.INSTANCE.toLectureDtoDto(lecture))
+												.collect(Collectors.toList());
+		lectureDtos.stream().forEach(lectureDto -> {
+			videoRepository.findByLectureId(lectureDto.getId()).stream().forEach(video -> {
+
+				lectureDto.addVideo(video);
+			});
+		});
 		return lectureDtos;
 	}
-
-	@Override
-	public void saveLecture(LectureDto lectureDto,Integer curriculumId) {
-		Lecture lecture = LectureMapper.INSTANCE.toLecture(lectureDto);
-		Curriculum curriculum = curriculumRepository.findById(curriculumId).orElseThrow(
-				()-> new ResourceNotFoundException("Curriculum", curriculumId));
-		lecture.setCurriculum(curriculum);
-		lectureRepository.save(lecture);
-	}
-
 }

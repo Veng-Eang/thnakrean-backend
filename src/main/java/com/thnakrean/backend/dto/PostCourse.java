@@ -1,19 +1,17 @@
 package com.thnakrean.backend.dto;
 
 import com.thnakrean.backend.entities.Category;
+import com.thnakrean.backend.entities.Course;
 import com.thnakrean.backend.entities.CourseLanguage;
 import com.thnakrean.backend.entities.Lecture;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
-public class CourseDto {
+public class PostCourse {
     private Integer id;
     private String title;
     private String shortDescription;
@@ -34,14 +32,5 @@ public class CourseDto {
     private CourseLanguage courseLanguage;
     private Integer reviewCount;
     private Long averageRating;
-    private List<LectureDto> lecturesDto=new ArrayList<>();
-
-    public void addLecture(LectureDto lectureDto){
-        if(lectureDto!=null){
-            if(lecturesDto==null){
-                lecturesDto=new ArrayList<>();
-            }
-            lecturesDto.add(lectureDto);
-        }
-    }
+    private List<LectureDto> lecturesDto;
 }

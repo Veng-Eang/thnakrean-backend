@@ -9,5 +9,5 @@ import com.thnakrean.backend.entities.Lecture;
 
 @Repository
 public interface LectureRepository extends JpaRepository<Lecture, Integer> {
-	List<Lecture> findByCurriculumId(Integer id);
+    List<Lecture> findLecturesByCourseId(Integer courseId);
 }

@@ -1,4 +1,4 @@
-package com.thnakrean.backend.spec;
+package com.thnakrean.backend.spec.filter;
 
 import lombok.Data;
 

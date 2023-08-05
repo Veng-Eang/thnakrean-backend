@@ -2,6 +2,7 @@ package com.thnakrean.backend.controller;
 
 import com.thnakrean.backend.dto.CourseDto;
 import com.thnakrean.backend.dto.CoursePageDto;
+import com.thnakrean.backend.dto.PostCourse;
 import com.thnakrean.backend.service.CourseService;
 
 import javax.transaction.Transactional;
@@ -20,8 +21,8 @@ public class CourseController {
 
 
     @PostMapping
-    public ResponseEntity<?> createCourse(@RequestBody CourseDto courseDto){
-        courseService.createCourse(courseDto);
+    public ResponseEntity<?> createCourse(@RequestBody PostCourse postCourse){
+        courseService.createCourse(postCourse);
         return  ResponseEntity.status(HttpStatus.CREATED).body("create successfully");
     }
 
@@ -31,7 +32,7 @@ public class CourseController {
         return ResponseEntity.ok(course);
     }
     @GetMapping("{id}")
-    public ResponseEntity<CourseDto> getById(@PathVariable("id") Integer id){
+    public ResponseEntity<CourseDto> getCourseById(@PathVariable("id") Integer id){
         CourseDto courseDto = courseService.getCourseById(id);
         return ResponseEntity.ok(courseDto);
     }
@@ -47,6 +48,7 @@ public class CourseController {
         courseService.deleteCourseById(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Delete course with Id "+id+" successfully.");
     }
+
 }
 
 

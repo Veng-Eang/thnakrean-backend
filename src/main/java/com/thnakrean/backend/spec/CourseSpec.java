@@ -5,6 +5,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import com.thnakrean.backend.spec.filter.CourseFilter;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,9 +15,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class CourseSpec implements Specification<Course> {
     private final CourseFilter courseFilter;
     List<Predicate> predicates = new ArrayList<>();
+
+    public CourseSpec(CourseFilter courseFilter) {
+        this.courseFilter = courseFilter;
+    }
+
     @Override
     public Predicate toPredicate(Root<Course> courseRoot, CriteriaQuery<?> query, CriteriaBuilder cb) {
         if(courseFilter.getTitle()!=null){
